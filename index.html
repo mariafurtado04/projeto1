@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>A Particular Viewpoint on the World</title>
+  <style>
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      color-scheme: dark;
+    }
+    html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+    img { max-width: 100%; }
+    [hidden]:not([hidden=until-found i]) { display: none !important; }
+  </style>
+  <script>
+    // Marca o Chrome para ajustar o tamanho do texto.
+    (function () {
+      const userAgent = navigator.userAgent;
+      const chrome = navigator.userAgentData?.brands?.some(function (item) {
+        return item.brand === 'Google Chrome';
+      }) || /(?:Chrome|CriOS)\//.test(userAgent) && !/(?:Edg|OPR|Brave|Vivaldi|YaBrowser)\//.test(userAgent);
+      if (chrome) document.documentElement.classList.add('chrome');
+    })();
+  </script>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=42dot+Sans:wght@300..800&display=swap">
+<style>
+  /* O cartaz usa 338 unidades de largura e adapta-se ao ecrã. */
+  :root {
+    --bg: #000000;
+    --ink: #ffffff;
+    --red: #ff2b1f;
+    --magenta: #ff1fd0;
+    --blue: #2121ff;
+    --cyan: #1fe6ff;
+    --yellow: #ffe814;
+    --orange: #ff7a00;
+    --green: #1cff2e;
+    --face: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --narrow: "Arial Narrow", "Liberation Sans Narrow", "Nimbus Sans Narrow", "Archivo Narrow", Arial, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--face);
+    padding: 0;
+  }
+
+  /* O cartaz ocupa toda a largura disponível. */
+  .poster {
+    container-type: inline-size;
+    width: 100%;
+    margin: 0;
+    overflow-x: clip;
+  }
+
+  .stage {
+    --u: calc(100cqw / 338);
+    position: relative;
+    height: calc(var(--u) * 2090);
+  }
+
+  .elemento {
+    position: absolute;
+    left: calc(var(--x) * var(--u));
+    top: calc(var(--y) * var(--u));
+    margin: 0;
+  }
+
+  /* Imagens. */
+  img.elemento {
+    width: calc(var(--w) * var(--u));
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+  img.invert { filter: invert(1); opacity: 0.55; mix-blend-mode: screen; }
+
+  /* Título e citações. */
+  .title, .q {
+    z-index: 4;
+    font-family: "42dot Sans", "Archivo", Arial, sans-serif;
+    font-size: calc(var(--u) * 30);
+    line-height: 1.0414;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: #ffffff;
+    paint-order: stroke fill;
+    white-space: nowrap;
+  }
+
+  .title { -webkit-text-stroke: calc(var(--u) * 2.32) #ff0d00; }
+
+  /* As citações ficam alinhadas à direita. */
+  .q {
+    left: auto;
+    right: calc((338 - var(--r)) * var(--u));
+    z-index: 3;
+    -webkit-text-stroke: calc(var(--u) * 2.32) #000000;
+    text-align: right;
+  }
+
+  /* Legendas pequenas. */
+  .s {
+    z-index: 3;
+    font-family: var(--narrow);
+    font-size: calc(var(--u) * 9);
+    line-height: 1.08;
+    white-space: nowrap;
+  }
+  .s.yellow { color: var(--yellow); }
+  .s.red {
+    color: var(--red);
+    line-height: 0.96;
+  }
+  .s.frase-igual { font-size: calc(var(--u) * 16); }
+  .s.filled {
+    background: var(--blue);
+    padding: calc(var(--u) * 2.2) calc(var(--u) * 2.6);
+    width: calc(var(--w) * var(--u));
+    box-sizing: border-box;
+    white-space: normal;
+    font-size: calc(var(--u) * 10);
+    line-height: 1.1;
+  }
+
+  /* Molduras coloridas e etiquetas. */
+  .box {
+    --b: calc(var(--u) * 2.2);
+    z-index: 2;
+    box-sizing: border-box;
+    width: calc(var(--w) * var(--u));
+    height: calc(var(--h) * var(--u));
+    border: var(--b) solid var(--c);
+    pointer-events: none;
+  }
+  .tag {
+    position: absolute;
+    left: calc(var(--b) * -1);
+    top: calc(var(--b) * -1);
+    background: var(--c);
+    color: #000;
+    font-family: var(--narrow);
+    font-size: calc(var(--u) * 7.4);
+    line-height: 1;
+    font-weight: 400;
+    padding: calc(var(--u) * 2.2) calc(var(--u) * 3.2) calc(var(--u) * 2.4) calc(var(--u) * 3.2);
+    white-space: nowrap;
+  }
+  .tag.light { color: #fff; }
+
+  /* Reduz as letras um terço apenas no Chrome. */
+  html.chrome .title, html.chrome .q { font-size: calc(var(--u) * 20); }
+  html.chrome .title, html.chrome .q { -webkit-text-stroke-width: calc(var(--u) * 1.55); }
+  html.chrome .s { font-size: calc(var(--u) * 6); }
+  html.chrome .s.frase-igual { font-size: calc(var(--u) * 10.67); }
+  html.chrome .s.filled { font-size: calc(var(--u) * 6.67); }
+  html.chrome .tag { font-size: calc(var(--u) * 4.93); }
+</style>
+
+<main class="poster">
+  <div class="stage">
+
+    <!-- Imagens -->
+    <img class="elemento" src="img/mouse.png" alt="A hand resting on the first wooden computer mouse" style="--x:3;--y:478;--w:180">
+    <img class="elemento" src="img/bandages.png" alt="Nineteenth-century engraving of heads wrapped in bandages" style="--x:160;--y:646;--w:150">
+    <img class="elemento" src="img/descartes.png" alt="Diagram of light rays entering the eyes and reaching the brain" style="--x:16;--y:752;--w:135">
+    <img class="elemento" src="img/eyes.png" alt="Diagram of a mask with eyes placed at measured positions" style="--x:98;--y:772;--w:240">
+    <img class="elemento" src="img/erie.png" alt="New York and Erie Railroad organization diagram" style="--x:92;--y:1298;--w:160">
+    <img class="elemento" src="img/animals.png" alt="Four animals labelled by texture and colour: black furry, spotted white, black green smooth, wet" style="--x:52;--y:1050;--w:200">
+    <img class="elemento" src="img/boxes.png" alt="Street scene with machine-vision labels on every person, bicycle and truck" style="--x:112;--y:1032;--w:222">
+    <img class="elemento" src="img/face.png" alt="Face analysis overlay reading human 98 percent, happy 99 percent" style="--x:125;--y:1158;--w:60">
+    <img class="elemento" src="img/bird.png" alt="Pressure maps of a bird's body" style="--x:168;--y:1163;--w:128">
+    <img class="elemento" src="img/book.png" alt="An open book with its pages fanned out" style="--x:18;--y:1398;--w:220">
+    <img class="elemento" src="img/cards.png" alt="Black cards with line diagrams labelled coral, ice core and lake sediment" style="--x:165;--y:1428;--w:148">
+    <img class="elemento" src="img/hominin.png" alt="Evolutionary timeline of hominin skulls" style="--x:70;--y:1632;--w:228">
+    <img class="elemento invert" src="img/patent.png" alt="Patent drawing of a person connected to computers and implants" style="--x:24;--y:1622;--w:130">
+    <img class="elemento" src="img/pcb.png" alt="A circuit board shaped like a haloed figure" style="--x:148;--y:1655;--w:148">
+    <img class="elemento" src="img/hans.png" alt="Clever Hans the horse beside his trainer and a blackboard of numbers" style="--x:48;--y:1882;--w:232">
+
+    <!-- Molduras -->
+    <div class="elemento box" style="--x:3;--y:405;--w:166;--h:107;--c:var(--magenta)"><span class="tag">past as future</span></div>
+    <div class="elemento box" style="--x:8;--y:706;--w:237;--h:230;--c:var(--blue)"><span class="tag light">ways of seeing</span></div>
+    <div class="elemento box" style="--x:66;--y:735;--w:262;--h:181;--c:var(--cyan)"><span class="tag">the dominant way of seeing</span></div>
+    <div class="elemento box" style="--x:8;--y:966;--w:236;--h:144;--c:var(--yellow)"><span class="tag">machine-learning and intelligence</span></div>
+    <div class="elemento box" style="--x:17;--y:1372;--w:148;--h:96;--c:var(--red)"><span class="tag">complex data structures</span></div>
+    <div class="elemento box" style="--x:160;--y:1503;--w:98;--h:62;--c:var(--orange)"><span class="tag">biased technology</span></div>
+    <div class="elemento box" style="--x:11;--y:1583;--w:307;--h:228;--c:var(--green)"><span class="tag">anthropomorphization</span></div>
+    <div class="elemento box" style="--x:11;--y:1845;--w:237;--h:165;--c:var(--yellow)"><span class="tag">machine-learning and intelligence</span></div>
+
+    <!-- Textos -->
+    <h1 class="elemento title" style="--x:22;--y:20">A PARTICULAR<br>VIEWPOINT ON<br>THE WORLD</h1>
+
+    <p class="elemento q" style="--r:320;--y:171">“The field of AI is<br>explicitly attempting<br>to capture the planet<br>in a computationally<br>legible form.”</p>
+
+    <p class="elemento s red frase-igual" style="--x:17;--y:296">“(...) the maps made by the AI<br>industry are political interventions, as opposed to<br>neutral reflections of the world.”</p>
+
+    <p class="elemento q" style="--r:327;--y:494">“Of course, the introduction of<br>computers into our already<br>highly technological society<br>has [...] driven man to an ever<br>more highly rationalistic view of<br>his society and an ever more<br>mechanistic image of himself.”</p>
+
+    <p class="elemento s" style="--x:218;--y:805">“Experts in any field rarely want people to<br>understand what they do, and generally enjoy<br>putting people down.”</p>
+
+    <p class="elemento s filled" style="--x:18;--y:880;--w:128">“Knowledge is power and so it tends to be hoarded. Experts in any field rarely want people to understand what they do, and generally enjoy putting people down.”</p>
+
+    <p class="elemento q" style="--r:329;--y:981">“AI professor Fei-Fei Li<br>describes her ImageNet<br>project as aiming to ‘map<br>out the entire world of<br>objects.”</p>
+
+    <p class="elemento s yellow frase-igual" style="--x:28;--y:1158">“AI systems are not autonomous, rational, or<br>able to discern anything without extensive,<br>computationally intensive training with large<br>datasets or predefined rules and rewards.”</p>
+
+    <p class="elemento q" style="--r:325;--y:1225">“Big data and machine<br>learning [...] do not simply<br>record the world; they train it.<br>By finding patterns and<br>making connections, they<br>generate ‘neighborhoods’of<br>similar users.”</p>
+
+    <p class="elemento s frase-igual" style="--x:166;--y:1429">“[...] each possible combination you<br>choose has different precise structures<br>implicit in it, arrangements and units<br>that flow from these ramified details.”</p>
+
+    <p class="elemento s frase-igual" style="--x:85;--y:1526">“Correlations can perpetuate<br>inequality (...). These correlations<br>are discriminatory, and some of<br>them are illegal.”</p>
+
+    <p class="elemento s yellow frase-igual" style="--x:28;--y:1611">“The fact that individuals bind<br>themselves with strong emotional<br>ties to machines ought not in itself<br>to be surprising.”</p>
+
+    <p class="elemento q" style="--r:322;--y:1693">“Western man’s entire<br>milieu is now pervaded by<br>complex technological<br>extensions of his every<br>functional capacity. ”</p>
+
+    <p class="elemento s yellow frase-igual" style="--x:82;--y:1898">“(...) a matter of MEDIA CONSCIOUSNESS, not<br>technical knowledge (...)”</p>
+
+    <p class="elemento q" style="--r:325;--y:1940">“Computers offer us the<br>first real chance to let<br>the human mind grow<br>to its full potential”</p>
+
+  </div>
+</main>
+
+<script>
+  /* Move cada elemento a uma velocidade diferente para criar profundidade. */
+  (function () {
+    const stage = document.querySelector('.stage');
+    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!stage || movimentoReduzido) return;
+
+    const imgDepth = [0.16, 0.22, 0.10, 0.26, 0.08, 0.30, 0.18, 0.34, 0.14, 0.24, 0.20, 0.12, 0.28, 0.18, 0.15];
+    const layers = [];
+
+    stage.querySelectorAll('img.elemento').forEach(function (el, i) {
+      layers.push({ el: el, d: imgDepth[i % imgDepth.length] });
+    });
+    stage.querySelectorAll('.box').forEach(function (el, i) {
+      layers.push({ el: el, d: 0.07 + (i % 3) * 0.04 });
+    });
+    stage.querySelectorAll('.q').forEach(function (el) { layers.push({ el: el, d: -0.05 }); });
+    stage.querySelectorAll('.s').forEach(function (el) { layers.push({ el: el, d: -0.08 }); });
+    layers.push({ el: stage.querySelector('.title'), d: -0.04 });
+
+    layers.forEach(function (l) { l.el.style.willChange = 'transform'; });
+
+    let ticking = false;
+
+    // Atualiza as posições ao deslocar a página.
+    function draw() {
+      ticking = false;
+      const top = stage.getBoundingClientRect().top;
+      const mid = window.innerHeight / 2;
+
+      layers.forEach(function (l) {
+        const cy = top + l.el.offsetTop + l.el.offsetHeight / 2;
+        const y = (mid - cy) * l.d;
+        l.el.style.transform = 'translate3d(0,' + y.toFixed(2) + 'px,0)';
+      });
+    }
+
+    // Evita agendar vários pedidos no mesmo fotograma.
+    function request() {
+      if (!ticking) { ticking = true; requestAnimationFrame(draw); }
+    }
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+
+    request();
+  })();
+</script>
+
+</body></html>
